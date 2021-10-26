@@ -6,42 +6,40 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnAdd, btnClear;
-    EditText etName, etEmail, etBookName, etBookAuthor, etBookId;
+    Button btnAdd, btnBuy;
+    EditText etSommo, etNome, etProce;
 
     DBHelper dbHelper;
     SQLiteDatabase database;
     ContentValues contentValues;
+    int Sommo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnAdd = (Button) findViewById(R.id.botonAdd);
         btnAdd.setOnClickListener((View.OnClickListener) this);
 
-        btnClear = (Button) findViewById(R.id.btnClear);
-        btnClear.setOnClickListener((View.OnClickListener) this);
+        btnBuy = (Button) findViewById((R.id.botonBuy));
+        btnBuy.setOnClickListener((View.OnClickListener) this);
 
-        etName = (EditText) findViewById(R.id.etName);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etBookId = (EditText) findViewById(R.id.etBookId);
-        etBookName = (EditText) findViewById(R.id.etBookName);
-        etBookAuthor = (EditText) findViewById(R.id.etBookAuthor);
+        etNome = (EditText) findViewById(R.id.etNome);
+        etSommo = (EditText) findViewById(R.id.etSommo);
+        etProce = (EditText) findViewById(R.id.etProce);
 
         dbHelper = new DBHelper(this);
         database = dbHelper.getWritableDatabase();
@@ -55,10 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
             int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
-            int emailIndex = cursor.getColumnIndex(DBHelper.KEY_MAIL);
-            int bookIdIndex = cursor.getColumnIndex(DBHelper.KEY_BOOK_ID);
-            int bookNameIndex = cursor.getColumnIndex(DBHelper.KEY_BOOK_NAME);
-            int bookAuthorIndex = cursor.getColumnIndex(DBHelper.KEY_BOOK_AUTHOR);
+            int priceIndex = cursor.getColumnIndex(DBHelper.KEY_PRICE);
             TableLayout dbOutput = findViewById(R.id.dbOutput);
             dbOutput.removeAllViews();
             do {
@@ -78,29 +73,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 outputName.setText(cursor.getString(nameIndex));
                 dbOutputRow.addView(outputName);
 
-                TextView outputMail = new TextView(this);
+                TextView outputProce = new TextView(this);
                 params.weight = 2.0f;
-                outputMail.setLayoutParams(params);
-                outputMail.setText(cursor.getString(emailIndex));
-                dbOutputRow.addView(outputMail);
+                outputProce.setLayoutParams(params);
+                outputProce.setText(cursor.getString(priceIndex));
+                dbOutputRow.addView(outputProce);
 
-                TextView outputBookIdIndex = new TextView(this);
-                params.weight = 2.0f;
-                outputMail.setLayoutParams(params);
-                outputMail.setText(cursor.getString(bookIdIndex));
-                dbOutputRow.addView(outputBookIdIndex);
+                Button cartBoton = new Button(this);
+                params.weight = 0.5f;
+                cartBoton.setOnClickListener(this);
+                cartBoton.setLayoutParams(params);
+                cartBoton.setText("В корзину");
+                cartBoton.setId(cursor.getInt(idIndex));
 
-                TextView outputBookNameIndex = new TextView(this);
-                params.weight = 2.0f;
-                outputMail.setLayoutParams(params);
-                outputMail.setText(cursor.getString(bookNameIndex));
-                dbOutputRow.addView(outputBookNameIndex);
-
-                TextView outputBookAuthorIndex = new TextView(this);
-                params.weight = 2.0f;
-                outputMail.setLayoutParams(params);
-                outputMail.setText(cursor.getString(bookAuthorIndex));
-                dbOutputRow.addView(outputBookAuthorIndex);
+                dbOutputRow.addView(cartBoton);
 
                 Button deleteButton = new Button(this);
                 params.weight = 0.5f;
@@ -123,32 +109,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
 
-            case R.id.btnAdd:
-                String name = etName.getText().toString();
-                String email = etEmail.getText().toString();
-                String bID = etBookId.getText().toString();
-                String bName = etBookName.getText().toString();
-                String bAuthor = etBookAuthor.getText().toString();
+            case R.id.botonAdd:
+                String name = etNome.getText().toString();
+                String price = etProce.getText().toString();
                 contentValues = new ContentValues();
                 contentValues.put(DBHelper.KEY_NAME, name);
-                contentValues.put(DBHelper.KEY_MAIL, email);
-                contentValues.put(DBHelper.KEY_BOOK_ID, bID);
-                contentValues.put(DBHelper.KEY_BOOK_NAME, bName);
-                contentValues.put(DBHelper.KEY_BOOK_AUTHOR, bAuthor);
+                contentValues.put(DBHelper.KEY_PRICE, price);
 
                 database.insert(DBHelper.TABLE_LIBRARY, null, contentValues);
-                etEmail.setText(null);
-                etName.setText(null);
-                etBookAuthor.setText(null);
-                etBookName.setText(null);
-                etBookId.setText(null);
+                etProce.setText(null);
+                etNome.setText(null);
                 UpdateTable();
+                break;
+            case R.id.botonBuy:
+                if(etSommo.getText().toString() == "Name" || etSommo.getText().toString() == null){
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Вы ничего не купили.", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else {
+                    etSommo.setText(null);
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Вы купили это.", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
                 break;
             default:
                 View butPr = (View) v.getParent();
                 ViewGroup botonPorent = (ViewGroup) butPr.getParent();
                 botonPorent.removeView(butPr);
                 botonPorent.invalidate();
+                if(((Button)v).getText() == "В корзину"){
+                    Sommo += Integer.valueOf(((TextView)((TableRow)v.getParent()).getChildAt(2)).getText().toString());
+                    etSommo.setText(String.valueOf(Sommo));
+                }
 
                 database.delete(DBHelper.TABLE_LIBRARY, DBHelper.KEY_ID + " = ?", new String[]{String.valueOf((v.getId()))});
                 Cursor cursorUpd = database.query(DBHelper.TABLE_LIBRARY, null, null, null, null, null, null);
@@ -156,19 +150,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (cursorUpd.moveToFirst()) {
                     int idIndex = cursorUpd.getColumnIndex(DBHelper.KEY_ID);
                     int nameIndex = cursorUpd.getColumnIndex(DBHelper.KEY_NAME);
-                    int emailIndex = cursorUpd.getColumnIndex(DBHelper.KEY_MAIL);
-                    int bookIdIndex = cursorUpd.getColumnIndex(DBHelper.KEY_BOOK_ID);
-                    int bookNameIndex = cursorUpd.getColumnIndex(DBHelper.KEY_BOOK_NAME);
-                    int bookAuthorIndex = cursorUpd.getColumnIndex(DBHelper.KEY_BOOK_AUTHOR);
+                    int priceIndex = cursorUpd.getColumnIndex(DBHelper.KEY_PRICE);
                     int realId = 1;
                     do{
                         if(cursorUpd.getInt(idIndex)>realId){
                             contentValues.put(DBHelper.KEY_ID, realId);
                             contentValues.put(DBHelper.KEY_NAME, cursorUpd.getString(nameIndex));
-                            contentValues.put(DBHelper.KEY_MAIL, cursorUpd.getString(emailIndex));
-                            contentValues.put(DBHelper.KEY_BOOK_ID, cursorUpd.getString(bookIdIndex));
-                            contentValues.put(DBHelper.KEY_BOOK_NAME, cursorUpd.getString(bookNameIndex));
-                            contentValues.put(DBHelper.KEY_BOOK_AUTHOR, cursorUpd.getString(bookAuthorIndex));
+                            contentValues.put(DBHelper.KEY_PRICE, cursorUpd.getString(priceIndex));
                             database.replace(DBHelper.TABLE_LIBRARY, null, contentValues);
                         }
                         realId++;
@@ -180,6 +168,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
         }
-        dbHelper.close();
     }
 }

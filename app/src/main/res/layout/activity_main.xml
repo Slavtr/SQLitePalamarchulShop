@@ -1,71 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="vertical">
 
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/etSommo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="Sum"
         android:minHeight="32dp"></EditText>
 
-    <EditText
-        android:id="@+id/etEmail"
+    <Button
+        android:id="@+id/botonBuy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:minHeight="48dp"></EditText>
-
-    <EditText
-        android:id="@+id/etBookId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="BookId"
-        android:minHeight="48dp"></EditText>
-
-    <EditText
-        android:id="@+id/etBookName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="BookName"
-        android:minHeight="48dp"></EditText>
-
-    <EditText
-        android:id="@+id/etBookAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Author"
-        android:minHeight="48dp"></EditText>
+        android:text="Buy" />
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etNome"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:minHeight="32dp"
+            tools:ignore="TouchTargetSizeCheck"></EditText>
+
+        <EditText
+            android:id="@+id/etProce"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:minHeight="32dp"
+            tools:ignore="TouchTargetSizeCheck"></EditText>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
+        android:id="@+id/botonAdd"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="Add">
-    </Button>
-
-    <Button
-        android:id="@+id/btnClear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Clear"></Button>
-</LinearLayout>
+        android:text="Add" />
 
     <TableLayout
         android:id="@+id/dbOutput"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="590dp">
 
         <TableRow
             android:layout_width="match_parent"
