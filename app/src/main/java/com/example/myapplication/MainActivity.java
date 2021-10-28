@@ -130,9 +130,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else {
                     etSommo.setText(null);
                     Toast toast = Toast.makeText(getApplicationContext(),
-                            "Вы купили это.", Toast.LENGTH_SHORT);
+                            "Вы накупили на " + String.valueOf(Sommo), Toast.LENGTH_SHORT);
                     toast.show();
                 }
+                Sommo = 0;
                 break;
             default:
                 View butPr = (View) v.getParent();
