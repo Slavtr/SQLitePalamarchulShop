@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:orientation="vertical">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
 
     <EditText
-        android:id="@+id/etSommo"
+        android:id="@+id/etNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Sum"
-        android:minHeight="32dp"></EditText>
+        android:hint="Name"
+        android:minHeight="32dp"
+        tools:ignore="TouchTargetSizeCheck"></EditText>
+
+    <EditText
+        android:id="@+id/etProce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Price"
+        android:minHeight="32dp"
+        tools:ignore="TouchTargetSizeCheck"></EditText>
 
     <Button
-        android:id="@+id/botonBuy"
+        android:id="@+id/botonAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buy" />
+        android:text="Add" />
 
     <Button
-        android:id="@+id/botonDB"
+        android:id="@+id/botonBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Database" />
+        android:text="Back" />
 
     <TableLayout
         android:id="@+id/dbOutput"
         android:layout_width="match_parent"
-        android:layout_height="638dp">
+        android:layout_height="545dp">
 
         <TableRow
             android:layout_width="match_parent"

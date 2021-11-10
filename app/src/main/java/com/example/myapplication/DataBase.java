@@ -17,28 +17,28 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class DataBase extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnBuy, btnDB;
-    EditText etSommo;
+    Button btnAdd, btnBack;
+    EditText etNome, etProce;
 
     DBHelper dbHelper;
     SQLiteDatabase database;
     ContentValues contentValues;
-    int Sommo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_data_base);
 
-        btnBuy = (Button) findViewById(R.id.botonBuy);
-        btnBuy.setOnClickListener((View.OnClickListener) this);
+        btnAdd = (Button) findViewById(R.id.botonAdd);
+        btnAdd.setOnClickListener((View.OnClickListener) this);
 
-        btnDB = (Button) findViewById((R.id.botonDB));
-        btnDB.setOnClickListener((View.OnClickListener) this);
+        btnBack = (Button) findViewById((R.id.botonBack));
+        btnBack.setOnClickListener((View.OnClickListener) this);
 
-        etSommo = (EditText) findViewById(R.id.etSommo);
+        etNome = (EditText) findViewById(R.id.etNome);
+        etProce = (EditText) findViewById(R.id.etProce);
 
         dbHelper = new DBHelper(this);
         database = dbHelper.getWritableDatabase();
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UpdateTable();
     }
 
-    public void UpdateTable(){
+    public void UpdateTable() {
         Cursor cursor = database.query(DBHelper.TABLE_LIBRARY, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -78,14 +78,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 outputProce.setText(cursor.getString(priceIndex));
                 dbOutputRow.addView(outputProce);
 
-                Button cartBoton = new Button(this);
+                Button deleteButton = new Button(this);
                 params.weight = 0.5f;
-                cartBoton.setOnClickListener(this);
-                cartBoton.setLayoutParams(params);
-                cartBoton.setText("В корзину");
-                cartBoton.setId(cursor.getInt(idIndex));
+                deleteButton.setOnClickListener(this);
+                deleteButton.setLayoutParams(params);
+                deleteButton.setText("Удалить запись");
+                deleteButton.setId(cursor.getInt(idIndex));
 
-                dbOutputRow.addView(cartBoton);
+                dbOutputRow.addView(deleteButton);
 
                 dbOutput.addView(dbOutputRow);
             } while (cursor.moveToNext());
@@ -99,33 +99,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
 
-            case R.id.botonBuy:
-                if(etSommo.getText().toString() == "Name" || etSommo.getText().toString() == null){
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Вы ничего не купили.", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else {
-                    etSommo.setText(null);
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Вы накупили на " + String.valueOf(Sommo), Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                Sommo = 0;
+            case R.id.botonAdd:
+                String name = etNome.getText().toString();
+                String price = etProce.getText().toString();
+                contentValues = new ContentValues();
+                contentValues.put(DBHelper.KEY_NAME, name);
+                contentValues.put(DBHelper.KEY_PRICE, price);
+
+                database.insert(DBHelper.TABLE_LIBRARY, null, contentValues);
+                etProce.setText(null);
+                etNome.setText(null);
+                UpdateTable();
                 break;
-            case R.id.botonDB:
-                Intent ontont = new Intent(this, DataBase.class);
-                startActivity(ontont);
+            case R.id.botonBack:
+                Intent ontent = new Intent(this, MainActivity.class);
+                startActivity(ontent);
                 break;
             default:
                 View butPr = (View) v.getParent();
                 ViewGroup botonPorent = (ViewGroup) butPr.getParent();
-                //botonPorent.removeView(butPr);
+                botonPorent.removeView(butPr);
                 botonPorent.invalidate();
-                Sommo += Integer.valueOf(((TextView)((TableRow)v.getParent()).getChildAt(2)).getText().toString());
-                etSommo.setText(String.valueOf(Sommo));
 
-                /*database.delete(DBHelper.TABLE_LIBRARY, DBHelper.KEY_ID + " = ?", new String[]{String.valueOf((v.getId()))});
+                database.delete(DBHelper.TABLE_LIBRARY, DBHelper.KEY_ID + " = ?", new String[]{String.valueOf((v.getId()))});
                 Cursor cursorUpd = database.query(DBHelper.TABLE_LIBRARY, null, null, null, null, null, null);
 
                 if (cursorUpd.moveToFirst()) {
@@ -133,20 +129,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int nameIndex = cursorUpd.getColumnIndex(DBHelper.KEY_NAME);
                     int priceIndex = cursorUpd.getColumnIndex(DBHelper.KEY_PRICE);
                     int realId = 1;
-                    do{
-                        if(cursorUpd.getInt(idIndex)>realId){
+                    do {
+                        if (cursorUpd.getInt(idIndex) > realId) {
                             contentValues.put(DBHelper.KEY_ID, realId);
                             contentValues.put(DBHelper.KEY_NAME, cursorUpd.getString(nameIndex));
                             contentValues.put(DBHelper.KEY_PRICE, cursorUpd.getString(priceIndex));
                             database.replace(DBHelper.TABLE_LIBRARY, null, contentValues);
                         }
                         realId++;
-                    }while (cursorUpd.moveToNext());
-                    if (cursorUpd.moveToLast() && v.getId()!=realId){
+                    } while (cursorUpd.moveToNext());
+                    if (cursorUpd.moveToLast() && v.getId() != realId) {
                         database.delete(DBHelper.TABLE_LIBRARY, DBHelper.KEY_ID + " = ?", new String[]{cursorUpd.getString(idIndex)});
                     }
                     UpdateTable();
-                }*/
+                }
                 break;
         }
     }
