@@ -4,8 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Slava/AS_programms/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/Slava/AS_programms/MyApplication2/app/src/main/res/layout/activity_auth.xml" value="0.371875" />
         <entry key="..\:/Slava/AS_programms/MyApplication2/app/src/main/res/layout/activity_data_base.xml" value="0.371875" />
+        <entry key="..\:/Slava/AS_programms/MyApplication2/app/src/main/res/layout/activity_login.xml" value="0.371875" />
         <entry key="..\:/Slava/AS_programms/MyApplication2/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Slava/AS_programms/MyApplication2/app/src/main/res/layout/fragment_first.xml" value="0.20885416666666667" />
       </map>
     </option>
   </component>
